@@ -9,6 +9,15 @@ const nextConfig: NextConfig = {
     });
     return config;
   },
+  images: {
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "robohash.org",
+        pathname: "/**",
+      },
+    ],
+  },
 };
 
 export default nextConfig;
