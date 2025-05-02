@@ -3,8 +3,10 @@ import Checkbox from "@/components/form/input/Checkbox";
 import Input from "@/components/form/input/InputField";
 import Label from "@/components/form/Label";
 import Button from "@/components/ui/button/Button";
+import { useAuth } from "@/hooks/useAuth";
 import { EyeCloseIcon, EyeIcon } from "@/icons";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 
 export default function SignInForm() {
@@ -12,10 +14,23 @@ export default function SignInForm() {
   const [isChecked, setIsChecked] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const { login, loading } = useAuth();
+  const router = useRouter();
 
 
-  const handleLogin = () => {
-    console.log("Login clicked", { email, password, isChecked });
+  const handleLogin = async () => {
+    if (!email || !password) {
+      console.log('Vui lòng nhập email và mật khẩu');
+      return;
+    }
+
+    const success = await login(email, password);
+
+    if (success) {
+      router.push('/');
+    } else {
+      console.log('Email hoặc mật khẩu không đúng');
+    }
   }
 
   return (
