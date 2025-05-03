@@ -3,6 +3,8 @@ import { setAuthCookies, clearAuthCookies } from '@/lib/auth';
 
 // URL API của backend
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3002';
+export const ACCESS_TOKEN_COOKIE = 'access_token';
+export const REFRESH_TOKEN_COOKIE = 'refresh_token';
 
 export async function POST(
     request: NextRequest,
@@ -19,11 +21,14 @@ export async function POST(
             return clearAuthCookies(logoutResponse);
         }
 
+        const accessToken = request.cookies.get(ACCESS_TOKEN_COOKIE)?.value;
+
         // Gọi API đến backend
         const response = await fetch(`${API_URL}/${path}`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
+                ...(accessToken ? { 'Authorization': `Bearer ${accessToken}` } : {})
             },
             body: JSON.stringify(body),
         });
@@ -64,7 +69,7 @@ export async function GET(
         const path = resolvedParams.path.join('/');
 
         // Lấy access token từ cookie
-        const accessToken = request.cookies.get('access-token')?.value;
+        const accessToken = request.cookies.get(ACCESS_TOKEN_COOKIE)?.value;
 
         // Gọi API đến backend với access token
         const response = await fetch(`${API_URL}/${path}`, {

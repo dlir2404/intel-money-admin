@@ -11,6 +11,8 @@ interface User {
     id: string;
     email: string;
     name: string;
+    phone: string;
+    picture: string;
     role: string;
 }
 
@@ -41,13 +43,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     const checkAuthStatus = async () => {
         try {
             setLoading(true);
-            const response = await fetch(`${API_PROXY_URL}/check-auth`, {
+            const response = await fetch(`${API_PROXY_URL}/auth/admin/me`, {
                 method: 'GET',
                 credentials: 'include',
             });
             if (response.ok) {
                 const data = await response.json();
-                setUser(data.user);
+                setUser(data);
                 setIsAuthenticated(true);
             } else {
                 setUser(null);
