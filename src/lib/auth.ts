@@ -1,12 +1,10 @@
 import { jwtDecode } from 'jwt-decode';
 import { cookies } from 'next/headers';
-import { NextRequest, NextResponse } from 'next/server';
+import { NextResponse } from 'next/server';
 
 export interface UserType {
-    id: string;
-    email: string;
-    name: string;
-    picture: string;
+    sub?: number;
+    role?: string;
     exp: number;
     iat: number;
 }
@@ -18,8 +16,6 @@ export interface TokenType {
 
 export const ACCESS_TOKEN_COOKIE = 'access_token';
 export const REFRESH_TOKEN_COOKIE = 'refresh_token';
-
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3002';
 
 export async function getTokenFromCookie() {
     const cookieStore = await cookies();
@@ -42,12 +38,12 @@ export function isTokenExpired(token: string) {
 // Lấy thông tin người dùng từ token
 export function getUserFromToken(token: string): UserType | null {
     try {
-      const decoded = jwtDecode(token);
-      return decoded as UserType;
+        const decoded = jwtDecode(token);
+        return decoded as UserType;
     } catch {
-      return null;
+        return null;
     }
-  }
+}
 
 
 export function setAuthCookies(response: NextResponse, token: TokenType) {
@@ -68,7 +64,7 @@ export function setAuthCookies(response: NextResponse, token: TokenType) {
         secure: process.env.NODE_ENV === 'production',
         sameSite: 'lax',
         path: '/',
-        maxAge: 60 * 60 * 24 * 30, // 30 days
+        maxAge: 60 * 60 * 24 * 60, // 60 days
     })
 
     return response;
@@ -84,9 +80,9 @@ export function clearAuthCookies(response: NextResponse) {
         sameSite: 'lax',
         path: '/',
         maxAge: 0
-      });
-      
-      response.cookies.set({
+    });
+
+    response.cookies.set({
         name: REFRESH_TOKEN_COOKIE,
         value: '',
         httpOnly: true,
@@ -94,7 +90,7 @@ export function clearAuthCookies(response: NextResponse) {
         sameSite: 'lax',
         path: '/',
         maxAge: 0
-      });
-      
-      return response;
+    });
+
+    return response;
 }

@@ -4,11 +4,20 @@ import { setAuthCookies, clearAuthCookies } from '@/lib/auth';
 // URL API của backend
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3002';
 
-export async function POST(request: NextRequest, { params }: { params: { path: string[] } }) {
+export async function POST(
+    request: NextRequest,
+    { params }: { params: Promise<{ path: string[] }> }
+) {
     try {
-        const awaitedParams = await params;
-        const path = awaitedParams.path.join('/');
+        const resolvedParams = await params;
+        const path = resolvedParams.path.join('/');
         const body = await request.json();
+
+        // Nếu là API sign out và thành công, xóa cookies
+        if (path === 'signout') {
+            const logoutResponse = NextResponse.json({}, { status: 200 });
+            return clearAuthCookies(logoutResponse);
+        }
 
         // Gọi API đến backend
         const response = await fetch(`${API_URL}/${path}`, {
@@ -27,7 +36,6 @@ export async function POST(request: NextRequest, { params }: { params: { path: s
             { status: response.status }
         );
 
-
         // Nếu là API sign in và thành công, lưu tokens vào cookies
         if (path === 'auth/admin/login' && response.ok && data.accessToken && data.refreshToken) {
             return setAuthCookies(nextResponse, {
@@ -36,15 +44,10 @@ export async function POST(request: NextRequest, { params }: { params: { path: s
             });
         }
 
-
-        // Nếu là API sign out và thành công, xóa cookies
-        if (path === 'signout' && response.ok) {
-            return clearAuthCookies(nextResponse);
-        }
-
         return nextResponse;
     } catch (error) {
-        console.error(`API proxy error (${params.path.join('/')}):`, error);
+        const resolvedParams = await params;
+        console.error(`API proxy error (${resolvedParams.path.join('/')}):`, error);
         return NextResponse.json(
             { message: 'Internal server error' },
             { status: 500 }
@@ -52,11 +55,13 @@ export async function POST(request: NextRequest, { params }: { params: { path: s
     }
 }
 
-
-export async function GET(request: NextRequest, { params }: { params: { path: string[] } }) {
+export async function GET(
+    request: NextRequest,
+    { params }: { params: Promise<{ path: string[] }> }
+) {
     try {
-        const awaitedParams = await params;
-        const path = awaitedParams.path.join('/');
+        const resolvedParams = await params;
+        const path = resolvedParams.path.join('/');
 
         // Lấy access token từ cookie
         const accessToken = request.cookies.get('access-token')?.value;
@@ -77,7 +82,8 @@ export async function GET(request: NextRequest, { params }: { params: { path: st
             { status: response.status }
         );
     } catch (error) {
-        console.error(`API proxy error (${params.path.join('/')}):`, error);
+        const resolvedParams = await params;
+        console.error(`API proxy error (${resolvedParams.path.join('/')}):`, error);
         return NextResponse.json(
             { message: 'Internal server error' },
             { status: 500 }

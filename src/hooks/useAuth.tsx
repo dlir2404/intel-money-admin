@@ -98,6 +98,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
             const response = await fetch(`${API_PROXY_URL}/signout`, {
                 method: 'POST',
                 credentials: 'include',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({}),
             });
 
             if (response.ok) {
