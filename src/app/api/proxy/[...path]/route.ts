@@ -3,8 +3,8 @@ import { setAuthCookies, clearAuthCookies } from '@/lib/auth';
 
 // URL API của backend
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3002';
-export const ACCESS_TOKEN_COOKIE = 'access_token';
-export const REFRESH_TOKEN_COOKIE = 'refresh_token';
+const ACCESS_TOKEN_COOKIE = 'access_token';
+const REFRESH_TOKEN_COOKIE = 'refresh_token';
 
 export async function POST(
     request: NextRequest,
