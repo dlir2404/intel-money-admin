@@ -5,7 +5,7 @@ import Button from "@/components/ui/button/Button";
 import { useAuth } from "@/hooks/useAuth";
 import { EyeCloseIcon, EyeIcon } from "@/icons";
 import { useRouter } from "next/navigation";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { notification } from "antd";
 
 export default function SignInForm() {
@@ -17,6 +17,29 @@ export default function SignInForm() {
   const router = useRouter();
 
   const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+  // Function to get a specific cookie value
+  const getCookie = (name: string) => {
+    const value = `; ${document.cookie}`;
+    const parts = value.split(`; ${name}=`);
+    if (parts.length === 2) return parts.pop()?.split(';').shift();
+    return undefined;
+  };
+  
+  const isTokenExpired = getCookie('isTokenExpires');
+  console.log('isTokenExpired', isTokenExpired);
+  
+  if (isTokenExpired === 'true') {
+    notification.warning({
+      placement: "topRight",
+      message: "Phiên đăng nhập đã hết hạn",
+      style: { zIndex: 1000 }
+    });
+    
+    document.cookie = 'isTokenExpires=; Max-Age=0; path=/;';
+  }
+}, [])
 
 
   const handleLogin = async () => {

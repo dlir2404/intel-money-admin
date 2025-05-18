@@ -45,6 +45,14 @@ export async function middleware(request: NextRequest) {
             // Nếu refresh token không thành công thì xóa tất cả tokens và chuyển hướng tới login
             let logoutResponse = NextResponse.redirect(new URL('/login', request.url));
             logoutResponse = clearAuthCookies(logoutResponse);
+            if (accessToken) {
+                logoutResponse.cookies.set({
+                    name: 'isTokenExpires',
+                    value: 'true',
+                    httpOnly: false,
+                    maxAge: 60, // 1 phút
+                });
+            }
 
             return logoutResponse;
         } catch (error) {
