@@ -16,6 +16,16 @@ const nextConfig: NextConfig = {
         hostname: "robohash.org",
         pathname: "/**",
       },
+      {
+        protocol: "https",
+        hostname: "www.gravatar.com",
+        pathname: "/**",
+      },
+      {
+        protocol: "https",
+        hostname: "lh3.googleusercontent.com",
+        pathname: "/**",
+      }
     ],
   },
 };

@@ -5,6 +5,7 @@ import { SidebarProvider } from '@/context/SidebarContext';
 import { ThemeProvider } from '@/context/ThemeContext';
 import { AuthProvider } from '@/hooks/useAuth';
 import '@ant-design/v5-patch-for-react-19';
+import { ReactQueryProviders } from '@/providers/reactquery';
 
 const outfit = Outfit({
   subsets: ["latin"],
@@ -20,7 +21,9 @@ export default function RootLayout({
       <body className={`${outfit.className} dark:bg-gray-900`}>
         <ThemeProvider>
           <AuthProvider>
-            <SidebarProvider>{children}</SidebarProvider>
+            <ReactQueryProviders>
+              <SidebarProvider>{children}</SidebarProvider>
+            </ReactQueryProviders>
           </AuthProvider>
         </ThemeProvider>
       </body>
