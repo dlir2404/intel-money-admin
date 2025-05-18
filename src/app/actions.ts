@@ -55,3 +55,26 @@ export async function setUserVip(userId: number, vipExpirationDate: Date): Promi
 
     return true;
 }
+
+export async function removeVip(userId: number): Promise<boolean> {
+    const cookieStore = await cookies();
+    const accessToken = cookieStore.get(ACCESS_TOKEN_COOKIE)?.value;
+
+    const response = await fetch(
+        `${API_URL}/admin/user/vip/disable`,
+        {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${accessToken}`,
+            },
+            body: JSON.stringify({ userId }),
+        }
+    );
+
+    if (!response.ok) {
+        throw new Error('Failed to remove VIP status');
+    }
+
+    return true;
+}

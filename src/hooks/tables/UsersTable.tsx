@@ -5,11 +5,13 @@ import { Space, TableProps, Tag, Table } from "antd";
 import { User } from "@/types/user";
 import { useState } from "react";
 import { SetVipModal } from "@/components/modals/setvip.modal";
+import { RemoveVipModal } from "@/components/modals/removevip.modal";
 
 export default function UsersTable() {
     const [page, setPage] = useState(1);
     const [pageSize, setPageSize] = useState(10);
     const [setVipOpen, setSetVipOpen] = useState(false);
+    const [removeVipOpen, setRemoveVipOpen] = useState(false);
     const [user, setUser] = useState<User | null>(null);
 
     const { data, isLoading, refetch } = useGetUsers({
@@ -74,7 +76,10 @@ export default function UsersTable() {
                         setSetVipOpen(true);
                         setUser(record);
                     }}>Set VIP</a>
-                    <a className="text-red-700">Deactivate</a>
+                    <a className="text-red-700" onClick={() => {
+                        setRemoveVipOpen(true);
+                        setUser(record);
+                    }}>Remove VIP</a>
                 </Space>
             ),
         },
@@ -104,6 +109,9 @@ export default function UsersTable() {
                 </div>
             </div>
             {(setVipOpen && user) && <SetVipModal isOpen={true} user={user} closeModal={() => setSetVipOpen(false)} onSuccess={() => {
+                refetch();
+            }}/>}
+            {(removeVipOpen && user) && <RemoveVipModal isOpen={true} user={user} closeModal={() => setRemoveVipOpen(false)} onSuccess={() => {
                 refetch();
             }}/>}
         </div>
