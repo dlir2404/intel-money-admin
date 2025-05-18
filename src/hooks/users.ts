@@ -2,12 +2,15 @@ import { useQuery } from "@tanstack/react-query"
 import { getUsers } from "@/app/actions"
 import { notification } from "antd";
 
-export const useGetUsers = () => {
+export const useGetUsers = ({
+    page = 1,
+    pageSize = 10
+}) => {
     return useQuery({
-        queryKey: ['users'],
+        queryKey: ['users', page, pageSize],
         queryFn: async () => {
             try {
-                return await getUsers(1, 10);
+                return await getUsers(page, pageSize);
             } catch (error) {
                 console.error("Error fetching users:", error);
                 notification.error({

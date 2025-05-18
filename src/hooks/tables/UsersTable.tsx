@@ -3,9 +3,16 @@ import Image from "next/image";
 import { useGetUsers } from "../users";
 import { Space, TableProps, Tag, Table } from "antd";
 import { User } from "@/types/user";
+import { useState } from "react";
 
 export default function UsersTable() {
-    const { data, isLoading } = useGetUsers();
+    const [page, setPage] = useState(1);
+    const [pageSize, setPageSize] = useState(10);
+
+    const { data, isLoading } = useGetUsers({
+        page: page,
+        pageSize: pageSize
+    });
 
     const columns: TableProps<User>['columns'] = [
         {
@@ -71,7 +78,23 @@ export default function UsersTable() {
         <div className="overflow-hidden rounded-xl border border-gray-200 bg-white dark:border-white/[0.05] dark:bg-white/[0.03]">
             <div className="max-w-full overflow-x-auto">
                 <div className="min-w-[1102px]">
-                    <Table rowKey='id' loading={isLoading} columns={columns} dataSource={data?.rows || []} />
+                    <Table
+                        rowKey='id'
+                        loading={isLoading}
+                        columns={columns}
+                        dataSource={data?.rows || []}
+                        pagination={{
+                            total: data?.count,
+                            pageSize: pageSize,
+                            current: page,
+                            showSizeChanger: true,
+                            showTotal: (total) => `Total ${total} users`,
+                        }}
+                        onChange={(pagination) => {
+                            setPage(pagination.current || 1);
+                            setPageSize(pagination.pageSize || 10);
+                        }}
+                    />
                 </div>
             </div>
         </div>
