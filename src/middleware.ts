@@ -20,7 +20,7 @@ export async function middleware(request: NextRequest) {
 
 
     // Nếu accessToken hết hạn và có refreshToken thì tự động làm mới token
-    if (accessToken && isTokenExpired(accessToken) && refreshToken && !isPublicRoute) {
+    if ((!accessToken || (accessToken && isTokenExpired(accessToken))) && refreshToken && !isPublicRoute) {
         try {
             const response = await fetch(`${API_URL}/auth/refresh-token`, {
                 method: 'POST',
