@@ -39,7 +39,9 @@ export const SetVipModal = ({ isOpen, closeModal, user, onSuccess }: SetVipModal
                 message: 'VIP status updated successfully',
             });
             closeModal();
-            onSuccess && onSuccess();
+            if (onSuccess) {
+                onSuccess();
+            }
         } else {
             notification.error({
                 placement: 'topRight',
@@ -55,14 +57,14 @@ export const SetVipModal = ({ isOpen, closeModal, user, onSuccess }: SetVipModal
     >
         <div className="">
             <h4 className="mb-6 text-lg font-medium text-gray-800 dark:text-white/90">
-                Set {user.name}'s VIP Information
+                Set {user.name}&apos;s VIP Information
             </h4>
 
             <DatePicker
                 id="date-picker"
                 label="Vip Expiration Date"
                 placeholder="Select a date"
-                onChange={(dates, currentDateString) => {
+                onChange={(dates) => {
                     setDate(dates[0]);
                 }}
             />

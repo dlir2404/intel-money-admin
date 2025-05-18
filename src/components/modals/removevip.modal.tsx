@@ -28,7 +28,9 @@ export const RemoveVipModal = ({ isOpen, closeModal, user, onSuccess }: RemoveVi
                 message: `Removed ${user.name}'s VIP status successfully`,
             });
             closeModal();
-            onSuccess && onSuccess();
+            if (onSuccess) {
+                onSuccess();
+            }
         } else {
             notification.error({
                 placement: 'topRight',
@@ -44,7 +46,7 @@ export const RemoveVipModal = ({ isOpen, closeModal, user, onSuccess }: RemoveVi
     >
         <div className="">
             <h4 className="mb-6 text-lg font-medium text-gray-800 dark:text-white/90">
-                Remove {user.name}'s VIP Information
+                Remove {user.name}&apos;s VIP Information
             </h4>
             <p className="text-sm leading-6 text-gray-500 dark:text-gray-400">
                 Are you sure you want to remove the VIP status for {user.name}? This action cannot be undone.
