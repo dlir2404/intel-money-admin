@@ -25,11 +25,11 @@ export default function UserDropdown() {
 
   async function handleSignOut() {
     await logout();
+    router.push("/signin");
     notification.success({
       placement: "topRight",
       message: "Logged out.",
     });
-    router.push("/signin");
   }
 
   return (
