@@ -32,3 +32,26 @@ export async function getUsers(page: number, pageSize: number): Promise<{ count:
         rows: data.rows,
     };
 }
+
+export async function setUserVip(userId: number, vipExpirationDate: Date): Promise<boolean> {
+    const cookieStore = await cookies();
+    const accessToken = cookieStore.get(ACCESS_TOKEN_COOKIE)?.value;
+
+    const response = await fetch(
+        `${API_URL}/admin/user/${userId}/vip`,
+        {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${accessToken}`,
+            },
+            body: JSON.stringify({ vipExpirationDate: vipExpirationDate.toISOString() }),
+        }
+    );
+
+    if (!response.ok) {
+        throw new Error('Failed to set user VIP status');
+    }
+
+    return true;
+}

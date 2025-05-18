@@ -4,12 +4,15 @@ import { useGetUsers } from "../users";
 import { Space, TableProps, Tag, Table } from "antd";
 import { User } from "@/types/user";
 import { useState } from "react";
+import { SetVipModal } from "@/components/modals/setvip.modal";
 
 export default function UsersTable() {
     const [page, setPage] = useState(1);
     const [pageSize, setPageSize] = useState(10);
+    const [setVipOpen, setSetVipOpen] = useState(false);
+    const [user, setUser] = useState<User | null>(null);
 
-    const { data, isLoading } = useGetUsers({
+    const { data, isLoading, refetch } = useGetUsers({
         page: page,
         pageSize: pageSize
     });
@@ -65,10 +68,13 @@ export default function UsersTable() {
         {
             title: 'Action',
             key: 'action',
-            render: () => (
+            render: (record: User) => (
                 <Space size="middle">
-                    <a>Set VIP</a>
-                    <a>Delete</a>
+                    <a onClick={() => {
+                        setSetVipOpen(true);
+                        setUser(record);
+                    }}>Set VIP</a>
+                    <a className="text-red-700">Deactivate</a>
                 </Space>
             ),
         },
@@ -97,6 +103,9 @@ export default function UsersTable() {
                     />
                 </div>
             </div>
+            {(setVipOpen && user) && <SetVipModal isOpen={true} user={user} closeModal={() => setSetVipOpen(false)} onSuccess={() => {
+                refetch();
+            }}/>}
         </div>
     );
 }
