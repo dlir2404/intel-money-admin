@@ -1,13 +1,12 @@
 "use client";
-import Checkbox from "@/components/form/input/Checkbox";
 import Input from "@/components/form/input/InputField";
 import Label from "@/components/form/Label";
 import Button from "@/components/ui/button/Button";
 import { useAuth } from "@/hooks/useAuth";
 import { EyeCloseIcon, EyeIcon } from "@/icons";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
+import { notification } from "antd";
 
 export default function SignInForm() {
   const [showPassword, setShowPassword] = useState(false);
@@ -17,6 +16,8 @@ export default function SignInForm() {
   const { login } = useAuth();
   const router = useRouter();
 
+  const [isLoading, setIsLoading] = useState(false);
+
 
   const handleLogin = async () => {
     if (!email || !password) {
@@ -24,12 +25,22 @@ export default function SignInForm() {
       return;
     }
 
+    setIsLoading(true);
+
     const success = await login(email, password);
+    setIsLoading(false);
 
     if (success) {
+      notification.success({
+        placement: "topRight",
+        message: "Đăng nhập thành công",
+      });
       router.push('/');
     } else {
-      console.log('Email hoặc mật khẩu không đúng');
+      notification.error({
+        placement: "topRight",
+        message: "Thông tin đăng nhập không chính xác",
+      })
     }
   }
 
@@ -77,22 +88,8 @@ export default function SignInForm() {
                     </span>
                   </div>
                 </div>
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-3">
-                    <Checkbox checked={isChecked} onChange={setIsChecked} />
-                    <span className="block font-normal text-gray-700 text-theme-sm dark:text-gray-400">
-                      Keep me logged in
-                    </span>
-                  </div>
-                  <Link
-                    href="/reset-password"
-                    className="text-sm text-brand-500 hover:text-brand-600 dark:text-brand-400"
-                  >
-                    Forgot password?
-                  </Link>
-                </div>
                 <div>
-                  <Button onClick={handleLogin} className="w-full" size="sm">
+                  <Button loading={isLoading} onClick={handleLogin} className="w-full" size="sm">
                     Sign in
                   </Button>
                 </div>

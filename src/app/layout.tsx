@@ -4,6 +4,7 @@ import './globals.css';
 import { SidebarProvider } from '@/context/SidebarContext';
 import { ThemeProvider } from '@/context/ThemeContext';
 import { AuthProvider } from '@/hooks/useAuth';
+import '@ant-design/v5-patch-for-react-19';
 
 const outfit = Outfit({
   subsets: ["latin"],

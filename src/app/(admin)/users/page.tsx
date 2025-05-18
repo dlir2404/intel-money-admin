@@ -1,5 +1,5 @@
 import PageBreadcrumb from "@/components/common/PageBreadCrumb";
-import UsersTable from "@/components/tables/UsersTable";
+import UsersTable from "@/hooks/tables/UsersTable";
 import { Metadata } from "next";
 import React from "react";
 
