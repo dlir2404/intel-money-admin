@@ -97,6 +97,11 @@ export default function SignInForm() {
                       onChange={(e) => setPassword(e.target.value)}
                       type={showPassword ? "text" : "password"}
                       placeholder="Enter your password"
+                      onKeyUp={(e) => {
+                        if (e.key === "Enter") {
+                          handleLogin();
+                        }
+                      }}
                     />
                     <span
                       onClick={() => setShowPassword(!showPassword)}
