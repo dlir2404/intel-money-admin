@@ -9,6 +9,7 @@ export const useGetUsers = () => {
             try {
                 return await getUsers(1, 10);
             } catch (error) {
+                console.error("Error fetching users:", error);
                 notification.error({
                     placement: "topRight",
                     message: "Lỗi khi tải danh sách người dùng",

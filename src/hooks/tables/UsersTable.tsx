@@ -18,13 +18,13 @@ export default function UsersTable() {
             title: 'User',
             dataIndex: 'name',
             key: 'user',
-            render: (val: any, user: User) => (<div className="flex items-center gap-3">
+            render: (val: string, user: User) => (<div className="flex items-center gap-3">
                 <div className="w-10 h-10 overflow-hidden rounded-full">
                     <Image
                         width={40}
                         height={40}
                         src={user.picture || "https://www.gravatar.com/avatar/?d=mp"}
-                        alt={user.name}
+                        alt={val}
                     />
                 </div>
                 <div>
@@ -58,7 +58,7 @@ export default function UsersTable() {
         {
             title: 'Action',
             key: 'action',
-            render: (_) => (
+            render: () => (
                 <Space size="middle">
                     <a>Set VIP</a>
                     <a>Delete</a>
