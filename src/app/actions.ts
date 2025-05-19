@@ -1,5 +1,6 @@
 'use server'
 
+import { Config } from "@/types/config";
 import { User } from "@/types/user";
 import { cookies } from "next/headers";
 
@@ -74,6 +75,54 @@ export async function removeVip(userId: number): Promise<boolean> {
 
     if (!response.ok) {
         throw new Error('Failed to remove VIP status');
+    }
+
+    return true;
+}
+
+export async function getConfigs(): Promise<Config> {
+    const cookieStore = await cookies();
+    const accessToken = cookieStore.get(ACCESS_TOKEN_COOKIE)?.value;
+
+    const response = await fetch(
+        `${API_URL}/system-config`,
+        {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${accessToken}`,
+            },
+        }
+    );
+
+    if (!response.ok) {
+        throw new Error('Failed to fetch configs');
+    }
+
+    const data = await response.json();
+
+    return data;
+}
+
+export async function updateConfig(value: Partial<Config>): Promise<boolean> {
+    const cookieStore = await cookies();
+    const accessToken = cookieStore.get(ACCESS_TOKEN_COOKIE)?.value;
+
+    const response = await fetch(
+        `${API_URL}/system-config`,
+        {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${accessToken}`,
+            },
+            body: JSON.stringify({ ...value }),
+        }
+    );
+
+    if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message[0]);
     }
 
     return true;
