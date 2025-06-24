@@ -53,11 +53,11 @@ export default function UsersTable() {
             dataIndex: 'email',
             key: 'email',
         },
-        {
-            title: 'Phone',
-            dataIndex: 'phone',
-            key: 'phone',
-        },
+        // {
+        //     title: 'Phone',
+        //     dataIndex: 'phone',
+        //     key: 'phone',
+        // },
         // {
         //     title: 'IsVip',
         //     key: 'vip',
