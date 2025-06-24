@@ -12,7 +12,7 @@ export default function UsersTable() {
     const [pageSize, setPageSize] = useState(10);
     const [search, setSearch] = useState<string | undefined>();
 
-    const { data, isLoading, refetch } = useGetUsers({
+    const { data, isLoading } = useGetUsers({
         page: page,
         pageSize: pageSize,
         search: search
@@ -69,7 +69,7 @@ export default function UsersTable() {
         {
             title: 'Action',
             key: 'action',
-            render: (record: User) => (
+            render: () => (
                 // <Space size="middle">
                 //     <a onClick={() => {
                 //         setSetVipOpen(true);
