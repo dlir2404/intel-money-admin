@@ -1,27 +1,20 @@
 'use client';
 import Image from "next/image";
 import { useGetUsers } from "../users";
-import { Space, TableProps, Tag, Table, Input, Select } from "antd";
+import {TableProps, Table, Input } from "antd";
 import { User } from "@/types/user";
 import { useMemo, useState } from "react";
-import { SetVipModal } from "@/components/modals/setvip.modal";
-import { RemoveVipModal } from "@/components/modals/removevip.modal";
 import { SearchOutlined } from "@ant-design/icons"
 import { debounce } from 'lodash';
 
 export default function UsersTable() {
     const [page, setPage] = useState(1);
     const [pageSize, setPageSize] = useState(10);
-    const [setVipOpen, setSetVipOpen] = useState(false);
-    const [removeVipOpen, setRemoveVipOpen] = useState(false);
-    const [user, setUser] = useState<User | null>(null);
-    const [vip, setVip] = useState<boolean | undefined>();
     const [search, setSearch] = useState<string | undefined>();
 
     const { data, isLoading, refetch } = useGetUsers({
         page: page,
         pageSize: pageSize,
-        isVip: vip,
         search: search
     });
 
@@ -150,12 +143,6 @@ export default function UsersTable() {
                         />
                     </div>
                 </div>
-                {(setVipOpen && user) && <SetVipModal isOpen={true} user={user} closeModal={() => setSetVipOpen(false)} onSuccess={() => {
-                    refetch();
-                }} />}
-                {(removeVipOpen && user) && <RemoveVipModal isOpen={true} user={user} closeModal={() => setRemoveVipOpen(false)} onSuccess={() => {
-                    refetch();
-                }} />}
             </div>
         </>
     );
