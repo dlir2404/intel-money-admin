@@ -4,13 +4,15 @@ import { notification } from "antd";
 
 export const useGetUsers = ({
     page = 1,
-    pageSize = 10
-}) => {
+    pageSize = 10,
+    isVip,
+    search
+}: { page: number, pageSize: number, isVip?: boolean, search?: string }) => {
     return useQuery({
-        queryKey: ['users', page, pageSize],
+        queryKey: ['users', page, pageSize, isVip, search],
         queryFn: async () => {
             try {
-                return await getUsers(page, pageSize);
+                return await getUsers(page, pageSize, isVip, search);
             } catch (error) {
                 console.error("Error fetching users:", error);
                 notification.error({

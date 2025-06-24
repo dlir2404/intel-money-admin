@@ -7,12 +7,20 @@ import { cookies } from "next/headers";
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3002';
 const ACCESS_TOKEN_COOKIE = 'access_token';
 
-export async function getUsers(page: number, pageSize: number): Promise<{ count: number; rows: User[] }> {
+export async function getUsers(page: number, pageSize: number, isVip?: boolean, search?: string): Promise<{ count: number; rows: User[] }> {
     const cookieStore = await cookies();
     const accessToken = cookieStore.get(ACCESS_TOKEN_COOKIE)?.value;
 
+    let url = `${API_URL}/admin/user/all?page=${page}&pageSize=${pageSize}`
+    if (isVip != undefined) {
+        url += `&isVip=${isVip}`
+    }
+    if (search != undefined) {
+        url += `&search=${search}`
+    }
+
     const response = await fetch(
-        `${API_URL}/admin/user/all?page=${page}&pageSize=${pageSize}`,
+        url,
         {
             method: 'GET',
             headers: {
@@ -23,6 +31,7 @@ export async function getUsers(page: number, pageSize: number): Promise<{ count:
     );
 
     if (!response.ok) {
+        console.log(accessToken)
         throw new Error('Failed to fetch users');
     }
 
