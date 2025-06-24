@@ -57,7 +57,7 @@ export default function SignInForm() {
         placement: "topRight",
         message: "Đăng nhập thành công",
       });
-      router.push('/');
+      router.push('/users');
     } else {
       notification.error({
         placement: "topRight",

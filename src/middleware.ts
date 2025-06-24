@@ -65,6 +65,10 @@ export async function middleware(request: NextRequest) {
         }
     }
 
+    if (pathname == "/") {
+        return NextResponse.redirect(new URL('/users', request.url));
+    }
+
     return NextResponse.next();
 }
 
