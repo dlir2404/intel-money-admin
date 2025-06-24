@@ -65,14 +65,14 @@ export default function UsersTable() {
             dataIndex: 'phone',
             key: 'phone',
         },
-        {
-            title: 'IsVip',
-            key: 'vip',
-            dataIndex: 'isVip',
-            render: (value: boolean) => (<Tag color={value ? "green" : "volcano"}>
-                {value ? "VIP" : "Normal"}
-            </Tag>),
-        },
+        // {
+        //     title: 'IsVip',
+        //     key: 'vip',
+        //     dataIndex: 'isVip',
+        //     render: (value: boolean) => (<Tag color={value ? "green" : "volcano"}>
+        //         {value ? "VIP" : "Normal"}
+        //     </Tag>),
+        // },
         {
             title: 'Action',
             key: 'action',
@@ -108,7 +108,7 @@ export default function UsersTable() {
                 <div className="min-w-[600px]">
                     <Input size="large" placeholder="Type to search ..." prefix={<SearchOutlined />} onChange={handleChange} />
                 </div>
-                <div>
+                {/* <div>
                     <Select
                         size="large"
                         placeholder="Vip status"
@@ -126,7 +126,7 @@ export default function UsersTable() {
                             }
                         ]}
                     />
-                </div>
+                </div> */}
             </div>
             <div className="overflow-hidden rounded-xl border border-gray-200 bg-white dark:border-white/[0.05] dark:bg-white/[0.03]">
                 <div className="max-w-full overflow-x-auto">
