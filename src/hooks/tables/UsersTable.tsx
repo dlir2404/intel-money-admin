@@ -77,16 +77,17 @@ export default function UsersTable() {
             title: 'Action',
             key: 'action',
             render: (record: User) => (
-                <Space size="middle">
-                    <a onClick={() => {
-                        setSetVipOpen(true);
-                        setUser(record);
-                    }}>Set VIP</a>
-                    <a className="text-red-700" onClick={() => {
-                        setRemoveVipOpen(true);
-                        setUser(record);
-                    }}>Remove VIP</a>
-                </Space>
+                // <Space size="middle">
+                //     <a onClick={() => {
+                //         setSetVipOpen(true);
+                //         setUser(record);
+                //     }}>Set VIP</a>
+                //     <a className="text-red-700" onClick={() => {
+                //         setRemoveVipOpen(true);
+                //         setUser(record);
+                //     }}>Remove VIP</a>
+                // </Space>
+                <></>
             ),
         },
     ];
